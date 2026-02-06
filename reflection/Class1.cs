@@ -1,17 +1,32 @@
-﻿namespace reflection;
+﻿using System.Reflection;
 
-public class Class1
+namespace reflection;
+
+public class Equipement
 {
-    private readonly int test;
+    public string Name { get; set; } = "PDU";
+    public string IpAddress { get; set; } = "192.168.0.1";
+}
 
-    public Class1() 
+public class Program
+{
+    public static void Main()
     {
-        test = Generic<int>();
-    }
+        Equipement device = new();
 
-    private static T Generic<T>()
-    {
-        T teste = Activator.CreateInstance<T>();
-        return teste;
+        Type type = device.GetType();
+
+        Console.WriteLine($"Inspect: {type.Name}");
+        Console.WriteLine("------------------------------");
+
+        PropertyInfo[] prop = type.GetProperties();
+
+        foreach (var p in prop)
+        {
+            string name = p.Name;
+            object value = p.GetValue(device);
+
+            Console.WriteLine($"{name}: {value} (Type: {p.PropertyType.Name})");
+        }
     }
 }
